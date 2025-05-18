@@ -1,0 +1,40 @@
+app:
+  security:
+    jwt:
+      secret: qwertyuiosdfgnhgfgfv92834dfddfgqwiehjkeqworfbjeqwadsh3hjfsdhqewrfjkwq3herhjo3eqwrbfhjn3rqew807uic1refdjlkepawhsonrsg0uiq4werhu34wkr9q24jwtguw3h4uit4uirqwte4q9twt4quinkglr
+      lifetime:
+        access: 300000
+        refresh: 600000
+    village:
+      jwt:
+        access-token-key: '{"kty":"oct","k":"hi7S5RX5ZRZooHAORKGctZ-KtR9F0ESgCnH-3BNg5XI"}'
+        refresh-token-key: '{"kty":"oct","k":"956PBFst1FguLr5irJD-aQ"}'
+
+spring:
+  application:
+    name: pineapple
+  datasource:
+    url: jdbc:postgresql://localhost:5050/pineapple
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+
+  flyway:
+    locations: classpath:db/migration
+    default-schema: public
+    schemas: public
+    enabled: true
+  jpa:
+    show-sql: true
+    generate-ddl: false
+    hibernate:
+      ddl-auto: validate
+
+server:
+  port: 8080
+
+logging:
+  level:
+    org.springframework.security: trace
+#springdoc
+#app
