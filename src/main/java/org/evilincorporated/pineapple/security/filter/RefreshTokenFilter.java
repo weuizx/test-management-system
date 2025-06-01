@@ -27,7 +27,7 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class RefreshTokenFilter extends OncePerRequestFilter {
 
-    private final RequestMatcher requestMatcher = new AntPathRequestMatcher("/jwt/refresh", PathItem.HttpMethod.POST.name());
+    private final RequestMatcher requestMatcher = new AntPathRequestMatcher("/api/v1/jwt/refresh", PathItem.HttpMethod.POST.name());
     private final SecurityContextRepository securityContextRepository = new RequestAttributeSecurityContextRepository();
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final Function<Token, Token> accessTokenFactory;

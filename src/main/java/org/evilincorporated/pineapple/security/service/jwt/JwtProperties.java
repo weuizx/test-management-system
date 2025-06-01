@@ -11,7 +11,7 @@ import java.time.Duration;
 @Setter
 @AllArgsConstructor
 @ConfigurationProperties(prefix = "app.security.jwt", ignoreUnknownFields = false)
-public class JwtConfiguration {
+public class JwtProperties {
 
     private final String accessTokenKey;
     private final String refreshTokenKey;

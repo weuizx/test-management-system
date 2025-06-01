@@ -1,12 +1,12 @@
 package org.evilincorporated.pineapple;
 
-import org.evilincorporated.pineapple.security.service.jwt.JwtConfiguration;
+import org.evilincorporated.pineapple.security.service.jwt.JwtProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 @SpringBootApplication
-@EnableConfigurationProperties(JwtConfiguration.class)
+@EnableConfigurationProperties(JwtProperties.class)
 public class PineappleProjectApplication {
 
     public static void main(String[] args) {

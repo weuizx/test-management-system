@@ -12,17 +12,18 @@ import lombok.Setter;
 import java.time.Instant;
 import java.util.UUID;
 
-@Entity
-@Table(name = "deactivated_token")
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "deactivated_token")
 public class DeactivatedToken {
 
     @Id
     private UUID id;
 
-    @Column(name = "keep_until")
+    @Column(name = "keep_until",
+            nullable = false)
     private Instant keepUntil;
 }

@@ -2,29 +2,30 @@ package org.evilincorporated.pineapple.domain.entity;
 
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashSet;
 import java.util.Set;
 
 
-@Entity
-@Table(name = "client")
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-public class Client {
+@AllArgsConstructor
+@Entity
+@Table(name = "users")
+public class User {
 
     @Id
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "client_seq")
+            generator = "users_seq")
     @SequenceGenerator(
-            name = "client_seq",
-            sequenceName = "client_id_seq",
+            name = "users_seq",
+            sequenceName = "users_id_seq",
             allocationSize = 1
     )
     private Long id;
@@ -38,15 +39,10 @@ public class Client {
             nullable = false)
     private String password;
 
-    @Column(name = "name")
+    @Column(name = "name",
+            nullable = false)
     private String name;
 
-    @Column(name = "surname")
-    private String surname;
-
-    @Column(name = "patronymic")
-    private String patronymic;
-
-    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<ClientAuthority> authorities;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<UserAuthority> authorities = new HashSet<>();
 }

@@ -11,14 +11,19 @@ import org.evilincorporated.pineapple.security.filter.JwtAuthenticationConfigure
 import org.evilincorporated.pineapple.security.service.jwt.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfiguration {
 
@@ -28,26 +33,38 @@ public class SecurityConfiguration {
         http.apply(jwtAuthenticationConfigurer);
 
         return http
-                .httpBasic(Customizer.withDefaults())
+                .httpBasic(AbstractHttpConfigurer::disable)
+                .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
                         .requestMatchers("/manager.html").hasRole("MANAGER")
-                        .requestMatchers("/error").permitAll()
+                        .requestMatchers(
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui/index.html"
+                        ).permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/users").permitAll()
                         .anyRequest().authenticated())
                 .build();
     }
 
     @Bean
-    public JwtAuthenticationConfigurer jwtAuthenticationConfigurer(JwtConfiguration jwtConfiguration,
-                                                                   DeactivatedTokenRepository deactivatedTokenRepository
+    public JwtAuthenticationConfigurer jwtAuthenticationConfigurer(JwtProperties jwtProperties,
+                                                                   DeactivatedTokenRepository deactivatedTokenRepository,
+                                                                   AuthenticationManager authenticationManager
     ) throws Exception {
         return new JwtAuthenticationConfigurer(
-                jwtConfiguration,
-                new RefreshTokenJweStringSerializer(new DirectEncrypter(OctetSequenceKey.parse(jwtConfiguration.getRefreshTokenKey()))),
-                new AccessTokenJwsStringSerializer(new MACSigner(OctetSequenceKey.parse(jwtConfiguration.getAccessTokenKey()))),
-                new RefreshTokenJweStringDeserializer(new DirectDecrypter(OctetSequenceKey.parse(jwtConfiguration.getRefreshTokenKey()))),
-                new AccessTokenJwsStringDeserializer(new MACVerifier(OctetSequenceKey.parse(jwtConfiguration.getAccessTokenKey()))),
-                deactivatedTokenRepository);
+                jwtProperties,
+                new RefreshTokenJweStringSerializer(new DirectEncrypter(OctetSequenceKey.parse(jwtProperties.getRefreshTokenKey()))),
+                new AccessTokenJwsStringSerializer(new MACSigner(OctetSequenceKey.parse(jwtProperties.getAccessTokenKey()))),
+                new RefreshTokenJweStringDeserializer(new DirectDecrypter(OctetSequenceKey.parse(jwtProperties.getRefreshTokenKey()))),
+                new AccessTokenJwsStringDeserializer(new MACVerifier(OctetSequenceKey.parse(jwtProperties.getAccessTokenKey()))),
+                deactivatedTokenRepository, authenticationManager);
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+        return configuration.getAuthenticationManager();
     }
 
 }

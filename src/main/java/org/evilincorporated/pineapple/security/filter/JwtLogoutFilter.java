@@ -8,9 +8,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.evilincorporated.pineapple.controller.dto.ApiError;
-import org.evilincorporated.pineapple.security.service.TokenUser;
-import org.evilincorporated.pineapple.domain.repository.DeactivatedTokenRepository;
 import org.evilincorporated.pineapple.domain.entity.DeactivatedToken;
+import org.evilincorporated.pineapple.domain.repository.DeactivatedTokenRepository;
+import org.evilincorporated.pineapple.security.service.TokenUser;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -27,7 +27,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtLogoutFilter extends OncePerRequestFilter {
 
-    private final RequestMatcher requestMatcher = new AntPathRequestMatcher("/jwt/logout", PathItem.HttpMethod.POST.name());
+    private final RequestMatcher requestMatcher = new AntPathRequestMatcher("/api/v1/jwt/logout", PathItem.HttpMethod.POST.name());
     private final SecurityContextRepository securityContextRepository = new RequestAttributeSecurityContextRepository();
     private final ObjectMapper objectMapper = new ObjectMapper();
 

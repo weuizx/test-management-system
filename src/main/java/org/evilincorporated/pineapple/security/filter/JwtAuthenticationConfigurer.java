@@ -8,7 +8,7 @@ import org.evilincorporated.pineapple.security.service.TokenAuthenticationUserDe
 import org.evilincorporated.pineapple.security.service.jwt.DefaultAccessTokenFactory;
 import org.evilincorporated.pineapple.security.service.jwt.DefaultRefreshTokenFactory;
 import org.evilincorporated.pineapple.security.service.jwt.JwtAuthenticationConverter;
-import org.evilincorporated.pineapple.security.service.jwt.JwtConfiguration;
+import org.evilincorporated.pineapple.security.service.jwt.JwtProperties;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -26,31 +26,31 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class JwtAuthenticationConfigurer extends AbstractHttpConfigurer<JwtAuthenticationConfigurer, HttpSecurity> {
 
-    private final JwtConfiguration jwtConfiguration;
+    private final JwtProperties jwtProperties;
     private final Function<Token, String> refreshTokenJweStringSerializer;
     private final Function<Token, String> accessTokenJwsStringSerializer;
     private final Function<String, Token> refreshTokenStringDeserializer;
     private final Function<String, Token> accessTokenStringDeserializer;
 
-
     private final DeactivatedTokenRepository deactivatedTokenRepository;
+    private final AuthenticationManager authenticationManager;
 
     @Override
     public void init(HttpSecurity builder) throws Exception {
         CsrfConfigurer csrfConfigurer = builder.getConfigurer(CsrfConfigurer.class);
         if (csrfConfigurer != null) {
-            csrfConfigurer.ignoringRequestMatchers(new AntPathRequestMatcher("/jwt/tokens", "POST"));
+            csrfConfigurer.ignoringRequestMatchers(new AntPathRequestMatcher("/api/v1/jwt/tokens", "POST"));
         }
         super.init(builder);
     }
 
     @Override
     public void configure(HttpSecurity builder) throws Exception {
-        Function<Authentication, Token> refreshTokenFactory = new DefaultRefreshTokenFactory(jwtConfiguration.getRefreshTokenTtl());
-        Function<Token, Token> accessTokenFactory = new DefaultAccessTokenFactory(jwtConfiguration.getAccessTokenTtl());
+        Function<Authentication, Token> refreshTokenFactory = new DefaultRefreshTokenFactory(jwtProperties.getRefreshTokenTtl());
+        Function<Token, Token> accessTokenFactory = new DefaultAccessTokenFactory(jwtProperties.getAccessTokenTtl());
         RequestJwtTokensFilter requestJwtTokensFilter = new RequestJwtTokensFilter(
                 refreshTokenFactory, accessTokenFactory,
-                refreshTokenJweStringSerializer, accessTokenJwsStringSerializer);
+                refreshTokenJweStringSerializer, accessTokenJwsStringSerializer, authenticationManager);
 
         AuthenticationConverter converter = new JwtAuthenticationConverter(refreshTokenStringDeserializer, accessTokenStringDeserializer);
         AuthenticationFilter jwtAuthenticationFilter = new AuthenticationFilter(builder.getSharedObject(AuthenticationManager.class), converter);

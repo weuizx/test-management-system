@@ -7,31 +7,33 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.evilincorporated.pineapple.security.service.UserRole;
 
-@Entity
-@Table(name = "client_authority")
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-public class ClientAuthority {
+@AllArgsConstructor
+@Entity
+@Table(name = "user_authority")
+public class UserAuthority {
 
     @Id
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "client_authority_seq"
+            generator = "user_authority_seq"
     )
     @SequenceGenerator(
-            name = "client_authority_seq",
-            sequenceName = "client_authority_id_seq",
+            name = "user_authority_seq",
+            sequenceName = "user_authority_id_seq",
             allocationSize = 1
     )
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "client_id", nullable = false)
-    private Client client;
+    @JoinColumn(name = "user_id",
+            nullable = false)
+    private User user;
 
-    @Column(name = "role")
+    @Column(name = "role",
+            nullable = false)
     @Enumerated(EnumType.STRING)
     private UserRole role;
 }
