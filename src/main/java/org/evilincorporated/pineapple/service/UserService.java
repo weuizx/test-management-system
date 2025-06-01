@@ -23,13 +23,13 @@ public class UserService {
         //TODO добавить проверку пароля (хотя бы не null)
         //TODO имя проверять на существующее
         User user = userRepository.save(userMapper.userDtoInToUser(userDtoIn));
-        return userMapper.toDto(user);
+        return userMapper.userToUserDto(user);
     }
 
     public UserDto getUser(Long id) {
         User user = userRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException(USER_NOT_FOUND_MESSAGE.formatted(id)));
-        return userMapper.toDto(user);
+        return userMapper.userToUserDto(user);
     }
 
     public UserDto updateUser(UserDtoIn userDtoIn) {
@@ -38,7 +38,7 @@ public class UserService {
                 () -> new EntityNotFoundException(USER_NOT_FOUND_MESSAGE.formatted(userDtoIn.getId())));
         user = userMapper.updateUserFromDto(userDtoIn, user);
         userRepository.save(user);
-        return userMapper.toDto(user);
+        return userMapper.userToUserDto(user);
     }
 
     public void deleteUser(Long id) {

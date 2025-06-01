@@ -10,9 +10,9 @@ import org.springframework.stereotype.Component;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public abstract class UserMapper {
 
-    public abstract User toEntity(UserDto userDto);
+    public abstract User userDtoToUser(UserDto userDto);
 
-    public abstract UserDto toDto(User user);
+    public abstract UserDto userToUserDto(User user);
 
     @Mapping(target = "username", source = "username")
     @Mapping(target = "name", source = "name")
