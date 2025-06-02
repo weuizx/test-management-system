@@ -32,7 +32,7 @@ public class TestCycleController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TestCycleDto> updateTestCycle(@PathVariable Long id, TestCycleDto testCycleDto) {
+    public ResponseEntity<TestCycleDto> updateTestCycle(@PathVariable Long id, @RequestBody TestCycleDto testCycleDto) {
         testCycleDto.setId(id);
         return ResponseEntity.ok(testCycleService.updateTestCycle(testCycleDto));
     }

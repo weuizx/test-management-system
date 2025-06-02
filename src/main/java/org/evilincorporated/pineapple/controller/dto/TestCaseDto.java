@@ -19,6 +19,5 @@ public class TestCaseDto {
     private String precondition;
     private Long requirementId;
     private Long projectId;
-//    private ProjectDto project;
 
 }

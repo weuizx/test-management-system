@@ -32,7 +32,7 @@ public class TestPlanController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TestPlanDto> updateTestPlan(@PathVariable Long id, TestPlanDto testPlanDto) {
+    public ResponseEntity<TestPlanDto> updateTestPlan(@PathVariable Long id, @RequestBody TestPlanDto testPlanDto) {
         testPlanDto.setId(id);
         return ResponseEntity.ok(testPlanService.updateTestPlan(testPlanDto));
     }

@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.evilincorporated.pineapple.domain.enums.TestPlanState;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -19,5 +21,6 @@ public class TestPlanDto {
     private Long assigneeId;
     private Long releaseId;
     private Long specificationId;
+    private List<Long> testCycleIds;
 
 }

@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.evilincorporated.pineapple.domain.enums.TestCycleState;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -43,5 +46,21 @@ public class TestCycle {
 
     @Column(name = "project_id")
     private Long projectId;
+
+    @ManyToMany()
+    @JoinTable(
+            name = "test_case_x_cycle",
+            joinColumns = @JoinColumn(name = "test_cycle_id"),
+            inverseJoinColumns = @JoinColumn(name = "test_case_id")
+    )
+    private Set<TestCase> testCases = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "test_plan_x_cycle",
+            joinColumns = @JoinColumn(name = "test_cycle_id"),
+            inverseJoinColumns = @JoinColumn(name = "test_plan_id")
+    )
+    private Set<TestCycle> testCycles = new HashSet<>();
 
 }
