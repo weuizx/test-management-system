@@ -2,6 +2,7 @@ package org.evilincorporated.pineapple.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.evilincorporated.pineapple.controller.dto.TestCaseDto;
+import org.evilincorporated.pineapple.controller.dto.TestCaseStepDto;
 import org.evilincorporated.pineapple.service.TestCaseService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -40,6 +41,29 @@ public class TestCaseController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTestCase(@PathVariable Long id) {
         testCaseService.deleteTestCase(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{id}/test-case-steps")
+    public ResponseEntity<TestCaseStepDto> createTestCaseStep(@PathVariable Long id, @RequestBody TestCaseStepDto testCaseStepDto) {
+        testCaseStepDto.setTestCaseId(id);
+        return ResponseEntity.ok(testCaseService.createTestCaseStep(testCaseStepDto));
+    }
+
+    @GetMapping("/{id}/test-case-steps")
+    public ResponseEntity<List<TestCaseStepDto>> getAllOfTestCase(@PathVariable Long id) {
+        return ResponseEntity.ok(testCaseService.getAllOfTestCase(id));
+    }
+
+    @PutMapping("/{id}/test-case-steps")
+    public ResponseEntity<TestCaseStepDto> updateTestCaseStep(@PathVariable Long id, @RequestBody TestCaseStepDto testCaseStepDto) {
+        testCaseStepDto.setTestCaseId(id);
+        return ResponseEntity.ok(testCaseService.updateTestCaseStep(testCaseStepDto));
+    }
+
+    @DeleteMapping("/{id}/test-case-steps")
+    public ResponseEntity<Void> deleteTestCaseStep(@PathVariable Long id, @RequestParam Long testCaseId) {
+        testCaseService.deleteTestCaseStep(testCaseId);
         return ResponseEntity.ok().build();
     }
 }

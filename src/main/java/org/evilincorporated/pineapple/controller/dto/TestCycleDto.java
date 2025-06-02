@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.evilincorporated.pineapple.domain.enums.TestCycleState;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -18,7 +20,6 @@ public class TestCycleDto {
     private TestCycleState state;
     private Long userId;
     private Long projectId;
-//    private UserDto user;
-//    private ProjectDto project;
+    private List<Long> testCaseIds;
 
 }
