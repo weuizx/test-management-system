@@ -1,0 +1,31 @@
+app:
+  security:
+    jwt:
+      access-token-key: ${ACCESS_TOKEN_KEY}
+      refresh-token-key: ${REFRESH_TOKEN_KEY}
+      access-token-ttl: ${ACCESS_TOKEN_TTL:300000}
+      refresh-token-ttl: ${REFRESH_TOKEN_TTL:86400000}
+
+spring:
+  application:
+    name: pineapple
+  datasource:
+    url: jdbc:postgresql://localhost:5050/pineapple
+    username: ${PG_USERNAME:postgres}
+    password: ${PG_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+
+  flyway:
+    locations: classpath:db/migration
+    default-schema: public
+    schemas: public
+    enabled: true
+  jpa:
+    show-sql: true
+    generate-ddl: false
+    hibernate:
+      ddl-auto: validate
+
+server:
+  port: 8080
+
