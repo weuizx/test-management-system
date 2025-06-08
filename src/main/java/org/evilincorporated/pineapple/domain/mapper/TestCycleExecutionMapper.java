@@ -5,10 +5,14 @@ import org.evilincorporated.pineapple.domain.entity.TestCycleExecution;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 
+import java.util.List;
+
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public abstract class TestCycleExecutionMapper {
 
-    public abstract TestCycleExecution toEntity(TestCycleExecutionDto testCycleExecutionDto);
+    public abstract TestCycleExecution testCycleExecutionDtoToTestCycleExecution(TestCycleExecutionDto testCycleExecutionDto);
 
-    public abstract TestCycleExecutionDto toDto(TestCycleExecution testCycleExecution);
+    public abstract TestCycleExecutionDto testCycleExecutionToTestCycleExecutionDto(TestCycleExecution testCycleExecution);
+
+    public abstract List<TestCycleExecutionDto> listTestCycleExecutionToListTestCycleExecutionDto(List<TestCycleExecution> testCycleExecutionList);
 }
