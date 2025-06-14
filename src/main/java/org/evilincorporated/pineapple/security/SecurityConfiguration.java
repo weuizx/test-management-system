@@ -7,6 +7,7 @@ import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jose.jwk.OctetSequenceKey;
 import lombok.RequiredArgsConstructor;
 import org.evilincorporated.pineapple.domain.repository.DeactivatedTokenRepository;
+import org.evilincorporated.pineapple.domain.repository.UserRepository;
 import org.evilincorporated.pineapple.security.filter.JwtAuthenticationConfigurer;
 import org.evilincorporated.pineapple.security.service.jwt.*;
 import org.springframework.context.annotation.Bean;
@@ -56,6 +57,7 @@ public class SecurityConfiguration {
 
     @Bean
     public JwtAuthenticationConfigurer jwtAuthenticationConfigurer(JwtProperties jwtProperties,
+                                                                   UserRepository userRepository,
                                                                    DeactivatedTokenRepository deactivatedTokenRepository,
                                                                    AuthenticationManager authenticationManager
     ) throws Exception {
@@ -65,7 +67,7 @@ public class SecurityConfiguration {
                 new AccessTokenJwsStringSerializer(new MACSigner(OctetSequenceKey.parse(jwtProperties.getAccessTokenKey()))),
                 new RefreshTokenJweStringDeserializer(new DirectDecrypter(OctetSequenceKey.parse(jwtProperties.getRefreshTokenKey()))),
                 new AccessTokenJwsStringDeserializer(new MACVerifier(OctetSequenceKey.parse(jwtProperties.getAccessTokenKey()))),
-                deactivatedTokenRepository, authenticationManager);
+                userRepository, deactivatedTokenRepository, authenticationManager);
     }
 
     @Bean

@@ -2,9 +2,12 @@ package org.evilincorporated.pineapple.security.service.jwt;
 
 
 import lombok.RequiredArgsConstructor;
+import org.evilincorporated.pineapple.domain.entity.User;
+import org.evilincorporated.pineapple.domain.repository.UserRepository;
 import org.evilincorporated.pineapple.security.service.Token;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -18,6 +21,8 @@ public class DefaultRefreshTokenFactory implements Function<Authentication, Toke
 
     private static final String GRANT_PREFIX = "GRANT_";
 
+    //TODO убрать костыль
+    private final UserRepository userRepository;
     private final Duration refreshTokenTtl;
 
     @Override
@@ -30,6 +35,8 @@ public class DefaultRefreshTokenFactory implements Function<Authentication, Toke
                 .map(authority -> GRANT_PREFIX + authority)
                 .forEach(authorities::add);
         Instant now = Instant.now();
-        return new Token(UUID.randomUUID(), authentication.getName(), authorities, now, now.plus(refreshTokenTtl));
+        User user = userRepository.findByUsername(authentication.getName()).orElseThrow(() ->
+                new UsernameNotFoundException("User was not found by username"));
+        return new Token(UUID.randomUUID(), authentication.getName(), user.getId(), authorities, now, now.plus(refreshTokenTtl));
     }
 }
