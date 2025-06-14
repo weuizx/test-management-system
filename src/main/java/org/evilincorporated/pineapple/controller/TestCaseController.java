@@ -33,7 +33,7 @@ public class TestCaseController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TestCaseDto> updateTestCase(@PathVariable Long id, TestCaseDto testCaseDto) {
+    public ResponseEntity<TestCaseDto> updateTestCase(@PathVariable Long id, @RequestBody TestCaseDto testCaseDto) {
         testCaseDto.setId(id);
         return ResponseEntity.ok(testCaseService.updateTestCase(testCaseDto));
     }

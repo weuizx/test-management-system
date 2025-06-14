@@ -32,7 +32,7 @@ public class ReleaseController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ReleaseDto> updateRelease(@PathVariable Long id, ReleaseDto releaseDto) {
+    public ResponseEntity<ReleaseDto> updateRelease(@PathVariable Long id, @RequestBody ReleaseDto releaseDto) {
         releaseDto.setId(id);
         return ResponseEntity.ok(releaseService.updateRelease(releaseDto));
     }
