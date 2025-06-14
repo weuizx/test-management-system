@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Set;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -34,5 +36,14 @@ public class Release {
 
     @Column(name = "project_id")
     private Long projectId;
+
+    @ManyToOne
+    @JoinColumn(name = "project_id",
+            nullable = false, insertable = false, updatable = false)
+    private Project project;
+
+    @OneToMany(mappedBy = "release", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<TestPlan> testPlans;
+
 
 }
