@@ -7,61 +7,215 @@
     <link rel="stylesheet" href="../css/dashboard.css">
 </head>
 <body>
-    <header class="header">
-        <div class="container">
-            <h1>Система управления тестированием</h1>
-            <button id="logoutBtn" class="logout-btn" >Выйти</button>
-        </div>
-    </header>
-    
-    <main class="container">
-        <div class="tabs">
-            <button class="tab-btn active" data-tab="projects">Проекты</button>
-            <button class="tab-btn" data-tab="releases">Релизы</button>
-            <button class="tab-btn" data-tab="test-plans">Тест-планы</button>
-            <button class="tab-btn" data-tab="test-cycles">Тест-циклы</button>
-            <button class="tab-btn" data-tab="test-cases">Тест-кейсы</button>
-        </div>
-        
-        <div class="tab-content active" id="projects-tab">
-            <button id="createProjectBtn" class="btn btn-primary">Создать проект</button>
-            <div id="projectsList" class="items-list"></div>
-        </div>
-        
-        <div class="tab-content" id="releases-tab">
-            <button id="createReleaseBtn" class="btn btn-primary">Создать релиз</button>
-            <div id="releasesList" class="items-list"></div>
-        </div>
-        
-        <div class="tab-content" id="test-plans-tab">
-            <button id="createTestPlanBtn" class="btn btn-primary">Создать тест-план</button>
-            <div id="testPlansList" class="items-list"></div>
-        </div>
-        
-        <div class="tab-content" id="test-cycles-tab">
-            <button id="createTestCycleBtn" class="btn btn-primary">Создать тест-цикл</button>
-            <div id="testCyclesList" class="items-list"></div>
-        </div>
-        
-        <div class="tab-content" id="test-cases-tab">
-            <button id="createTestCaseBtn" class="btn btn-primary">Создать тест-кейс</button>
-            <div id="testCasesList" class="items-list"></div>
-        </div>
-    </main>
-    
-    <!-- Модальные окна для создания сущностей -->
-    <div id="modalOverlay" class="modal-overlay" style="display: none;">
-        <div class="modal">
-            <div class="modal-header">
-                <h3 id="modalTitle">Создать</h3>
-                <button class="close-btn">&times;</button>
+<header class="header">
+    <div class="container">
+        <h1>Система управления тестированием</h1>
+        <button id="logoutBtn" class="logout-btn">Выйти</button>
+    </div>
+</header>
+
+<main class="container">
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="projects">Проекты</button>
+        <button class="tab-btn" data-tab="releases">Релизы</button>
+        <button class="tab-btn" data-tab="test-plans">Тест-планы</button>
+        <button class="tab-btn" data-tab="test-cycles">Тест-циклы</button>
+        <button class="tab-btn" data-tab="test-cases">Тест-кейсы</button>
+        <button class="tab-btn" data-tab="executions">Выполнения</button>
+        <button class="tab-btn" data-tab="statistics">Статистика</button>
+    </div>
+
+    <div class="tab-content active" id="projects-tab">
+        <button id="createProjectBtn" class="btn btn-primary">Создать проект</button>
+        <div id="projectsList" class="items-list"></div>
+    </div>
+
+    <div class="tab-content" id="releases-tab">
+        <button id="createReleaseBtn" class="btn btn-primary">Создать релиз</button>
+        <div id="releasesList" class="items-list"></div>
+    </div>
+
+    <div class="tab-content" id="test-plans-tab">
+        <button id="createTestPlanBtn" class="btn btn-primary">Создать тест-план</button>
+        <div id="testPlansList" class="items-list"></div>
+    </div>
+
+    <div class="tab-content" id="test-cycles-tab">
+        <button id="createTestCycleBtn" class="btn btn-primary">Создать тест-цикл</button>
+        <div id="testCyclesList" class="items-list"></div>
+    </div>
+
+    <div class="tab-content" id="test-cases-tab">
+        <button id="createTestCaseBtn" class="btn btn-primary">Создать тест-кейс</button>
+        <div id="testCasesList" class="items-list"></div>
+    </div>
+
+    <div class="tab-content" id="executions-tab">
+        <div class="execution-controls">
+            <div class="execute-form">
+                <select id="testCaseSelect" class="form-control">
+                    <option value="" disabled selected>Выберите тест-кейс</option>
+                </select>
+                <button id="executeTestCaseBtn" class="btn btn-primary">Выполнить тест-кейс</button>
             </div>
-            <div class="modal-body" id="modalFormContainer">
-                <!-- Формы будут подгружаться динамически -->
+            <div class="execute-form">
+                <select id="testCycleSelect" class="form-control">
+                    <option value="" disabled selected>Выберите тест-цикл</option>
+                </select>
+                <button id="executeTestCycleBtn" class="btn btn-primary">Выполнить тест-цикл</button>
+            </div>
+        </div>
+
+        <div class="history-buttons">
+            <button id="loadTestCaseExecutionsBtn" class="btn btn-secondary">Загрузить историю тест-кейсов</button>
+            <button id="loadTestCycleExecutionsBtn" class="btn btn-secondary">Загрузить историю тест-циклов</button>
+        </div>
+
+        <div class="execution-history">
+            <h2 class="execution-title">Список выполнений тест-кейсов</h2>
+            <div id="testCaseExecutionsList" class="items-list-execution"></div>
+            <h2 class="execution-title">Список выполнений тест-циклов</h2>
+            <div id="testCycleExecutionsList" class="items-list-execution"></div>
+        </div>
+    </div>
+
+    <div class="tab-content" id="statistics-tab">
+        <div class="statistics-filters">
+            <select id="statisticsType" class="form-control">
+                <option value="project">По проекту</option>
+                <option value="release">По релизу</option>
+            </select>
+            <select id="statisticsEntityId" class="form-control" required>
+                <option value="" disabled selected>Выберите проект</option>
+            </select>
+            <button id="loadStatisticsBtn" class="btn btn-primary">Загрузить статистику</button>
+        </div>
+
+        <div id="statisticsContainer" class="statistics-container">
+            <div class="statistics-grid">
+                <div class="statistic-card">
+                    <h4>Успешно</h4>
+                    <p id="passedCount">0</p>
+                    <div class="progress-bar">
+                        <div id="passedProgress" class="progress-fill" style="background: #4CAF50;"></div>
+                    </div>
+                </div>
+                <div class="statistic-card">
+                    <h4>Провалено</h4>
+                    <p id="failedCount">0</p>
+                    <div class="progress-bar">
+                        <div id="failedProgress" class="progress-fill" style="background: #F44336;"></div>
+                    </div>
+                </div>
+                <div class="statistic-card">
+                    <h4>Не выполнено</h4>
+                    <p id="notExecutedCount">0</p>
+                    <div class="progress-bar">
+                        <div id="notExecutedProgress" class="progress-fill" style="background: #9E9E9E;"></div>
+                    </div>
+                </div>
+                <div class="statistic-card">
+                    <h4>Заблокировано</h4>
+                    <p id="blockedCount">0</p>
+                    <div class="progress-bar">
+                        <div id="blockedProgress" class="progress-fill" style="background: #FF9800;"></div>
+                    </div>
+                </div>
+                <div class="statistic-card">
+                    <h4>Пропущено</h4>
+                    <p id="skippedCount">0</p>
+                    <div class="progress-bar">
+                        <div id="skippedProgress" class="progress-fill" style="background: #2196F3;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="statisticsChart"></canvas>
             </div>
         </div>
     </div>
-    
-    <script type="module" src="../js/dashboard.js"></script>
+
+</main>
+
+<!-- Модальные окна для создания сущностей -->
+<div id="modalOverlay" class="modal-overlay" style="display: none;">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 id="modalTitle">Создать</h3>
+            <button class="close-btn">&times;</button>
+        </div>
+        <div class="modal-body" id="modalFormContainer">
+            <!-- Формы будут подгружаться динамически -->
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно выполнения тест-кейса -->
+<div id="executeTestCaseModal" class="modal-overlay" style="display: none;">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>Выполнение тест-кейса</h3>
+            <button class="close-btn">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form id="executeTestCaseForm">
+                <div class="form-group">
+                    <label for="testCaseStatus">Статус</label>
+                    <select id="testCaseStatus" class="form-control" required>
+                        <option value="NOT_EXECUTED">Не выполнен</option>
+                        <option value="IN_PROGRESS">В процессе</option>
+                        <option value="PASSED">Успешно</option>
+                        <option value="FAILED">Провалено</option>
+                        <option value="BLOCKED">Заблокировано</option>
+                        <option value="SKIPPED">Пропущено</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="testCaseComment">Комментарий</label>
+                    <textarea id="testCaseComment" class="form-control" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Сохранить результат</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно выполнения тест-цикла -->
+<div id="executeTestCycleModal" class="modal-overlay" style="display: none;">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>Выполнение тест-цикла</h3>
+            <button class="close-btn">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form id="executeTestCycleForm">
+                <div class="form-group">
+                    <label for="testsPassed">Успешно выполнено</label>
+                    <input type="number" id="testsPassed" class="form-control" min="0" value="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="testsFailed">Провалено</label>
+                    <input type="number" id="testsFailed" class="form-control" min="0" value="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="testsNotExecuted">Не выполнено</label>
+                    <input type="number" id="testsNotExecuted" class="form-control" min="0" value="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="testsBlocked">Заблокировано</label>
+                    <input type="number" id="testsBlocked" class="form-control" min="0" value="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="testsSkipped">Пропущено</label>
+                    <input type="number" id="testsSkipped" class="form-control" min="0" value="0" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Сохранить результат</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script type="module" src="../js/dashboard.js"></script>
 </body>
 </html>
