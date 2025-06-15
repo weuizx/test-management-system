@@ -18,7 +18,7 @@ public class TestCycleDto {
     private String name;
     private String description;
     private TestCycleState state;
-    private Long userId;
+    private Long assigneeId;
     private Long projectId;
     private List<Long> testCaseIds;
 

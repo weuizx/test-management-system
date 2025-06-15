@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.evilincorporated.pineapple.domain.enums.TestCaseExecutionState;
+import org.evilincorporated.pineapple.domain.enums.TestCaseState;
 
 import java.time.ZonedDateTime;
 
@@ -37,7 +37,7 @@ public class TestCaseExecution {
     @Column(name = "state",
             nullable = false)
     @Enumerated(EnumType.STRING)
-    private TestCaseExecutionState state;
+    private TestCaseState state;
 
     @Column(name = "user_id")
     private Long userId;

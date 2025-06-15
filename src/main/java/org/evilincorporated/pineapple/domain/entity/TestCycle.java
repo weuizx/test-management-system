@@ -47,6 +47,11 @@ public class TestCycle {
     @Column(name = "project_id")
     private Long projectId;
 
+    @ManyToOne
+    @JoinColumn(name = "project_id",
+            nullable = false, insertable = false, updatable = false)
+    private Project project;
+
     @ManyToMany()
     @JoinTable(
             name = "test_case_x_cycle",

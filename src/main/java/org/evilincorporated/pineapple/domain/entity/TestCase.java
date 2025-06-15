@@ -47,6 +47,14 @@ public class TestCase {
     @Column(name = "project_id")
     private Long projectId;
 
+    @ManyToOne
+    @JoinColumn(name = "project_id",
+            nullable = false, insertable = false, updatable = false)
+    private Project project;
+
+    @OneToMany(mappedBy = "testCase", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<TestCaseStep> testCaseSteps;
+
     @ManyToMany
     @JoinTable(
             name = "test_case_x_cycle",

@@ -23,6 +23,6 @@ public class DefaultAccessTokenFactory implements Function<Token, Token> {
                         .map(authority -> authority.substring(GRANT_PREFIX.length()))
                         .toList();
         Instant now = Instant.now();
-        return new Token(token.getId(), token.getSubject(), authorities, now, now.plus(accessTokenTtl));
+        return new Token(token.getId(), token.getSubject(), token.getUserId(), authorities, now, now.plus(accessTokenTtl));
     }
 }

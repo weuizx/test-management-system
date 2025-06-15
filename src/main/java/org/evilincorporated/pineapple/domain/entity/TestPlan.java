@@ -50,6 +50,11 @@ public class TestPlan {
     @Column(name = "release_id")
     private Long releaseId;
 
+    @ManyToOne
+    @JoinColumn(name = "release_id",
+            nullable = false, insertable = false, updatable = false)
+    private Release release;
+
     @ManyToMany
     @JoinTable(
             name = "test_plan_x_cycle",

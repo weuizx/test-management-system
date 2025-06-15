@@ -37,4 +37,9 @@ public class TestCaseStep {
     @Column(name = "test_case_id")
     private Long testCaseId;
 
+    @ManyToOne
+    @JoinColumn(name = "test_case_id",
+            nullable = false, insertable = false, updatable = false)
+    private TestCase testCase;
+
 }

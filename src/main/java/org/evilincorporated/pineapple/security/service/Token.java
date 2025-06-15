@@ -12,6 +12,7 @@ import java.util.UUID;
 public class Token {
     private final UUID id;
     private final String subject;
+    private final Long userId;
     private final List<String> authorities;
     private final Instant createdAt;
     private final Instant expiredAt;

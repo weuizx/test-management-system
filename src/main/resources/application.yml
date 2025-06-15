@@ -10,7 +10,7 @@ spring:
   application:
     name: pineapple
   datasource:
-    url: jdbc:postgresql://localhost:5050/pineapple
+    url: ${PG_DATASOURCE_URL}
     username: ${PG_USERNAME:postgres}
     password: ${PG_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver

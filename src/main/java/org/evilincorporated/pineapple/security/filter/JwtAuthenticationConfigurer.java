@@ -3,6 +3,7 @@ package org.evilincorporated.pineapple.security.filter;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.evilincorporated.pineapple.domain.repository.DeactivatedTokenRepository;
+import org.evilincorporated.pineapple.domain.repository.UserRepository;
 import org.evilincorporated.pineapple.security.service.Token;
 import org.evilincorporated.pineapple.security.service.TokenAuthenticationUserDetailsService;
 import org.evilincorporated.pineapple.security.service.jwt.DefaultAccessTokenFactory;
@@ -32,6 +33,7 @@ public class JwtAuthenticationConfigurer extends AbstractHttpConfigurer<JwtAuthe
     private final Function<String, Token> refreshTokenStringDeserializer;
     private final Function<String, Token> accessTokenStringDeserializer;
 
+    private final UserRepository userRepository;
     private final DeactivatedTokenRepository deactivatedTokenRepository;
     private final AuthenticationManager authenticationManager;
 
@@ -46,7 +48,7 @@ public class JwtAuthenticationConfigurer extends AbstractHttpConfigurer<JwtAuthe
 
     @Override
     public void configure(HttpSecurity builder) throws Exception {
-        Function<Authentication, Token> refreshTokenFactory = new DefaultRefreshTokenFactory(jwtProperties.getRefreshTokenTtl());
+        Function<Authentication, Token> refreshTokenFactory = new DefaultRefreshTokenFactory(userRepository, jwtProperties.getRefreshTokenTtl());
         Function<Token, Token> accessTokenFactory = new DefaultAccessTokenFactory(jwtProperties.getAccessTokenTtl());
         RequestJwtTokensFilter requestJwtTokensFilter = new RequestJwtTokensFilter(
                 refreshTokenFactory, accessTokenFactory,

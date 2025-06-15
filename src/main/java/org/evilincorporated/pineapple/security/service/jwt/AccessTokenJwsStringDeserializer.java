@@ -17,6 +17,7 @@ import java.util.function.Function;
 public class AccessTokenJwsStringDeserializer implements Function<String, Token> {
 
     private static final String CLAIM_AUTHORITIES = "authorities";
+    private static final String CLAIM_USER_ID = "userId";
 
     private final JWSVerifier jwsVerifier;
 
@@ -29,6 +30,7 @@ public class AccessTokenJwsStringDeserializer implements Function<String, Token>
                 return new Token(
                         UUID.fromString(claimsSet.getJWTID()),
                         claimsSet.getSubject(),
+                        claimsSet.getLongClaim(CLAIM_USER_ID),
                         claimsSet.getStringListClaim(CLAIM_AUTHORITIES),
                         claimsSet.getIssueTime().toInstant(),
                         claimsSet.getExpirationTime().toInstant());

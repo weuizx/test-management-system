@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.evilincorporated.pineapple.domain.enums.TestCaseExecutionState;
+import org.evilincorporated.pineapple.domain.enums.TestCaseState;
 
 import java.time.ZonedDateTime;
 
@@ -17,9 +17,8 @@ public class TestCaseExecutionDto {
     private Long id;
     private ZonedDateTime executionDateTime;
     private String result;
-    private TestCaseExecutionState state;
-    private UserDto user;
+    private TestCaseState state;
+    private Long userId;
     private Long testCaseId;
-//    private TestCaseDto testCase;
 
 }

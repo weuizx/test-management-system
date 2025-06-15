@@ -20,8 +20,7 @@ public class TestCycleExecutionDto {
     private Integer testsNotExecuted;
     private Integer testsSkipped;
     private Integer testsBlocked;
-    private UserDto user;
+    private Long userId;
     private Long testCycleId;
-//    private TestCycleDto testCycle;
 
 }

@@ -15,6 +15,7 @@ import java.util.function.Function;
 public class RefreshTokenJweStringSerializer implements Function<Token, String> {
 
     private static final String CLAIM_AUTHORITIES = "authorities";
+    private static final String CLAIM_USER_ID = "userId";
 
     private final JWEAlgorithm jweAlgorithm = JWEAlgorithm.DIR;
     private final EncryptionMethod encryptionMethod = EncryptionMethod.A128GCM;
@@ -30,6 +31,7 @@ public class RefreshTokenJweStringSerializer implements Function<Token, String> 
                 .issueTime(Date.from(token.getCreatedAt()))
                 .expirationTime(Date.from(token.getExpiredAt()))
                 .claim(CLAIM_AUTHORITIES, token.getAuthorities())
+                .claim(CLAIM_USER_ID, token.getUserId())
                 .build();
         try {
             EncryptedJWT encryptedJWT = new EncryptedJWT(jweHeader, claimSet);
