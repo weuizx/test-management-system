@@ -17,7 +17,7 @@ document.getElementById('registerForm').addEventListener('submit', async functio
     successElement.style.display = 'none';
     
     try {
-        const response = await fetch('${API_BASE_URL}/users', {
+        const response = await fetch(`${API_BASE_URL}/users`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

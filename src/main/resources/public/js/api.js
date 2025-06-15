@@ -47,7 +47,7 @@ export async function refreshToken() {
     }
     
     try {
-        const response = await fetch('${API_BASE_URL}/jwt/refresh', {
+        const response = await fetch(`${API_BASE_URL}/jwt/refresh`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${refreshToken}`,

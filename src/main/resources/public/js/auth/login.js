@@ -17,7 +17,7 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
         // Basic Auth header
         const authHeader = 'Basic ' + btoa(username + ':' + password);
         
-        const response = await fetch('${API_BASE_URL}/jwt/tokens', {
+        const response = await fetch(`${API_BASE_URL}/jwt/tokens`, {
             method: 'POST',
             headers: {
                 'Authorization': authHeader,
