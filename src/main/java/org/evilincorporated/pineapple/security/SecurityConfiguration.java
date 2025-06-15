@@ -44,13 +44,18 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
-                        .requestMatchers("/manager.html").hasRole("MANAGER")
                         .requestMatchers(
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui/index.html"
                         ).permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/users").permitAll()
+                        .requestMatchers(
+                                "/auth/**",
+                                "/dashboard/**",
+                                "/css/**",
+                                "/js/**"
+                        ).permitAll()
                         .anyRequest().authenticated())
                 .build();
     }

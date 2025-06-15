@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Система управления тестированием</title>
+    <link rel="stylesheet" href="../css/dashboard.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1>Система управления тестированием</h1>
+            <button id="logoutBtn" class="logout-btn" >Выйти</button>
+        </div>
+    </header>
+    
+    <main class="container">
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="projects">Проекты</button>
+            <button class="tab-btn" data-tab="releases">Релизы</button>
+            <button class="tab-btn" data-tab="test-plans">Тест-планы</button>
+            <button class="tab-btn" data-tab="test-cycles">Тест-циклы</button>
+            <button class="tab-btn" data-tab="test-cases">Тест-кейсы</button>
+        </div>
+        
+        <div class="tab-content active" id="projects-tab">
+            <button id="createProjectBtn" class="btn btn-primary">Создать проект</button>
+            <div id="projectsList" class="items-list"></div>
+        </div>
+        
+        <div class="tab-content" id="releases-tab">
+            <button id="createReleaseBtn" class="btn btn-primary">Создать релиз</button>
+            <div id="releasesList" class="items-list"></div>
+        </div>
+        
+        <div class="tab-content" id="test-plans-tab">
+            <button id="createTestPlanBtn" class="btn btn-primary">Создать тест-план</button>
+            <div id="testPlansList" class="items-list"></div>
+        </div>
+        
+        <div class="tab-content" id="test-cycles-tab">
+            <button id="createTestCycleBtn" class="btn btn-primary">Создать тест-цикл</button>
+            <div id="testCyclesList" class="items-list"></div>
+        </div>
+        
+        <div class="tab-content" id="test-cases-tab">
+            <button id="createTestCaseBtn" class="btn btn-primary">Создать тест-кейс</button>
+            <div id="testCasesList" class="items-list"></div>
+        </div>
+    </main>
+    
+    <!-- Модальные окна для создания сущностей -->
+    <div id="modalOverlay" class="modal-overlay" style="display: none;">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="modalTitle">Создать</h3>
+                <button class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body" id="modalFormContainer">
+                <!-- Формы будут подгружаться динамически -->
+            </div>
+        </div>
+    </div>
+    
+    <script type="module" src="../js/dashboard.js"></script>
+</body>
+</html>
