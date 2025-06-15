@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/test-cycle-execution")
+@RequestMapping("/api/v1/test-case-execution")
 public class TestCaseExecutionController {
 
     private final TestCaseExecutionService testCaseExecutionService;
