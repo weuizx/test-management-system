@@ -1,0 +1,36 @@
+services:
+  test-management-system-app:
+    image: ghcr.io/weuizx/pineapple:latest
+    depends_on:
+      - postgresql
+    ports:
+      - "8080:8080"
+    environment:
+      ACCESS_TOKEN_KEY: ${ACCESS_TOKEN_KEY}
+      REFRESH_TOKEN_KEY: ${REFRESH_TOKEN_KEY}
+      ACCESS_TOKEN_TTL: ${ACCESS_TOKEN_TTL}
+      REFRESH_TOKEN_TTL: ${REFRESH_TOKEN_TTL}
+      PG_DATASOURCE_URL: ${PG_DATASOURCE_URL}
+      PG_USERNAME: ${PG_USERNAME}
+      PG_PASSWORD: ${PG_PASSWORD}
+    networks:
+      - backend
+
+  postgresql:
+    image: postgres:16
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${PG_USERNAME}
+      POSTGRES_PASSWORD: ${PG_PASSWORD}
+    volumes:
+      - postgresql:/var/lib/postgresql/data
+    networks:
+      - backend
+
+volumes:
+  postgresql: { }
+
+networks:
+  backend: { }
