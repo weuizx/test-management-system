@@ -1,3 +1,5 @@
+const API_BASE_URL = 'http://45.142.44.171:8080/api/v1';
+
 document.getElementById('loginForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     
@@ -15,7 +17,7 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
         // Basic Auth header
         const authHeader = 'Basic ' + btoa(username + ':' + password);
         
-        const response = await fetch('http://localhost:8080/api/v1/jwt/tokens', {
+        const response = await fetch('${API_BASE_URL}/jwt/tokens', {
             method: 'POST',
             headers: {
                 'Authorization': authHeader,

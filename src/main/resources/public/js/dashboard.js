@@ -1,6 +1,6 @@
 import { makeAuthenticatedRequest, fetchData } from './api.js';
 
-const API_BASE_URL = 'http://localhost:8080/api/v1';
+const API_BASE_URL = 'http://45.142.44.171:8080/api/v1';
 let currentUser = null;
 let selectedProjectId = null;
 let currentTestCaseId = null;

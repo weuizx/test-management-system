@@ -1,3 +1,5 @@
+const API_BASE_URL = 'http://45.142.44.171:8080/api/v1';
+
 document.getElementById('registerForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     
@@ -15,7 +17,7 @@ document.getElementById('registerForm').addEventListener('submit', async functio
     successElement.style.display = 'none';
     
     try {
-        const response = await fetch('http://localhost:8080/api/v1/users', {
+        const response = await fetch('${API_BASE_URL}/users', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

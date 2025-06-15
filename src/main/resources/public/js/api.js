@@ -1,3 +1,5 @@
+const API_BASE_URL = 'http://45.142.44.171:8080/api/v1';
+
 // Общая функция для авторизованных запросов
 export async function makeAuthenticatedRequest(url, method = 'GET', body = null) {
     let accessToken = localStorage.getItem('accessToken');
@@ -45,7 +47,7 @@ export async function refreshToken() {
     }
     
     try {
-        const response = await fetch('http://localhost:8080/api/v1/jwt/refresh', {
+        const response = await fetch('${API_BASE_URL}/jwt/refresh', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${refreshToken}`,
