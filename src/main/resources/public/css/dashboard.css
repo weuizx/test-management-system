@@ -627,3 +627,22 @@ textarea.form-control {
     border: 1px solid #ddd;
     border-radius: 4px;
 }
+
+#requirementId {
+    margin-bottom: 5px;
+}
+
+#requirementId option {
+    padding: 5px;
+    border-bottom: 1px solid #eee;
+}
+
+#requirementId option:hover {
+    background-color: #f5f5f5;
+}
+
+#loadRequirementsBtn {
+    width: 100%;
+    padding: 5px;
+    font-size: 0.9em;
+}
