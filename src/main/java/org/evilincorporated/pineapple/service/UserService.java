@@ -5,9 +5,12 @@ import lombok.RequiredArgsConstructor;
 import org.evilincorporated.pineapple.controller.dto.UserDto;
 import org.evilincorporated.pineapple.controller.dto.UserDtoIn;
 import org.evilincorporated.pineapple.domain.entity.User;
+import org.evilincorporated.pineapple.domain.entity.UserAuthority;
 import org.evilincorporated.pineapple.domain.mapper.UserMapper;
 import org.evilincorporated.pineapple.domain.repository.UserRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.Set;
 
 //TODO сделать чтобы пользователь мог процессить ток себя
 @Service
@@ -22,8 +25,12 @@ public class UserService {
     public UserDto createUser(UserDtoIn userDtoIn) {
         //TODO добавить проверку пароля (хотя бы не null)
         //TODO имя проверять на существующее
-        User user = userRepository.save(userMapper.userDtoInToUser(userDtoIn));
-        return userMapper.userToUserDto(user);
+        User user = userMapper.userDtoInToUser(userDtoIn);
+        UserAuthority userAuthority = new UserAuthority();
+        userAuthority.setRole(userDtoIn.getRole());
+        userAuthority.setUser(user);
+        user.setAuthorities(Set.of(userAuthority));
+        return userMapper.userToUserDto(userRepository.save(user));
     }
 
     public UserDto getUser(Long id) {
@@ -37,8 +44,13 @@ public class UserService {
         User user = userRepository.findById(userDtoIn.getId()).orElseThrow(
                 () -> new EntityNotFoundException(USER_NOT_FOUND_MESSAGE.formatted(userDtoIn.getId())));
         user = userMapper.updateUserFromDto(userDtoIn, user);
-        userRepository.save(user);
-        return userMapper.userToUserDto(user);
+        if (userDtoIn.getRole() != null) {
+            UserAuthority userAuthority = new UserAuthority();
+            userAuthority.setRole(userDtoIn.getRole());
+            userAuthority.setUser(user);
+            user.setAuthorities(Set.of(userAuthority));
+        }
+        return userMapper.userToUserDto(userRepository.save(user));
     }
 
     public void deleteUser(Long id) {
