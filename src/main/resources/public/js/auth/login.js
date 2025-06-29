@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://45.142.44.171:8080/api/v1';
+const API_BASE_URL = 'http://45.142.44.171:32769/api/v1';
 
 document.getElementById('loginForm').addEventListener('submit', async function(e) {
     e.preventDefault();

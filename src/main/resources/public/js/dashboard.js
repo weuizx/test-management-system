@@ -1,6 +1,6 @@
 import { makeAuthenticatedRequest, fetchData } from './api.js';
 
-const API_BASE_URL = 'http://45.142.44.171:8080/api/v1';
+const API_BASE_URL = 'http://45.142.44.171:32769/api/v1';
 let currentUser = null;
 let selectedProjectId = null;
 let currentTestCaseId = null;
@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     setupModals();
     loadInitialData();
     setupLogout();
+    checkStatisticsAccess();
 });
 
 async function checkAuth() {
@@ -130,6 +131,15 @@ function setupModals() {
             });
         });
 
+        document.getElementById('loadRequirementsBtn')?.addEventListener('click', () => {
+            const projectId = document.getElementById('projectId').value;
+            if (projectId) {
+                loadRequirementsForSelect(projectId);
+            } else {
+                showErrorMessage('Сначала выберите проект');
+            }
+        });
+
         document.getElementById('loadTestCaseExecutionsBtn').addEventListener('click', loadTestCaseExecutions);
         document.getElementById('loadTestCycleExecutionsBtn').addEventListener('click', loadTestCycleExecutions);
 }
@@ -246,6 +256,20 @@ async function loadTestCycleExecutions() {
     document.getElementById('testCycleExecutionsList').innerHTML = 
       '<p class="error">Ошибка при загрузке данных о выполнении тест-циклов</p>';
   }
+}
+
+function checkStatisticsAccess() {
+    const statisticsTabBtn = document.querySelector('.tab-btn[data-tab="statistics"]');
+    const statisticsTabContent = document.getElementById('statistics-tab');
+    
+    // Разрешенные роли
+    const allowedRoles = ["ROLE_ADMIN", "ROLE_TEST_MANAGER"];
+    const currentUserRole = currentUser.role;
+    
+    if (!allowedRoles.includes(currentUserRole)) {
+        statisticsTabBtn.style.display = 'none';
+        statisticsTabContent.style.display = 'none';
+    }
 }
 
 function setupStatisticsTab() {
@@ -379,6 +403,15 @@ function showCreateForm(type) {
                         <label for="projectId">Проект</label>
                         <select id="projectId" class="form-control" required></select>
                     </div>
+                    <div class="form-group">
+                        <label for="requirementId">Требование</label>
+                        <select id="requirementId" class="form-control">
+                            <option value="">Не выбрано</option>
+                        </select>
+                        <button type="button" id="loadRequirementsBtn" class="btn btn-secondary" style="margin-top: 5px;">
+                            Загрузить требования
+                        </button>
+                    </div>
                     <button type="submit" class="btn btn-primary">Создать</button>
                 </form>
             `;
@@ -393,9 +426,19 @@ function showCreateForm(type) {
         if (selectedProjectId) {
             document.getElementById('projectId').value = selectedProjectId;
         }
+        if (type === 'test-case') {
+            loadRequirementsForSelect(selectedProjectId);
+        }
     }
     if (type === 'test-plan') {
         loadReleasesForSelect(selectedProjectId);
+    }
+    if (type === 'test-case') {
+        document.getElementById('projectId').addEventListener('change', (e) => {
+            if (e.target.value) {
+                loadRequirementsForSelect(e.target.value);
+            }
+        });
     }
     
     document.getElementById('createForm').addEventListener('submit', async (e) => {
@@ -444,6 +487,7 @@ async function handleCreateFormSubmit(type) {
                     name: document.getElementById('name').value,
                     precondition: document.getElementById('precondition').value,
                     projectId: parseInt(document.getElementById('projectId').value),
+                    requirementId: document.getElementById('requirementId').value || null,
                     state: "NOT_EXECUTED"
                 });
                 break;
@@ -1523,5 +1567,32 @@ async function handleTestCycleExecution(e) {
         loadTestCycleExecutions();
     } catch (error) {
         showErrorMessage(error.message);
+    }
+}
+
+async function loadRequirementsForSelect(projectId) {
+    try {
+        // Заглушка - статический список требований
+        const requirements = [
+            { id: 1, code: "REQ-001", title: "Авторизация пользователя", description: "Система должна предоставлять возможность авторизации" },
+            { id: 2, code: "REQ-002", title: "Создание проекта", description: "Администратор должен иметь возможность создавать проекты" },
+            { id: 3, code: "REQ-003", title: "Управление тест-кейсами", description: "Пользователь должен иметь возможность создавать и редактировать тест-кейсы" },
+            { id: 4, code: "REQ-004", title: "Генерация отчетов", description: "Система должна генерировать отчеты по выполнению тестов" },
+            { id: 5, code: "REQ-005", title: "Интеграция с CI/CD", description: "Система должна интегрироваться с pipeline CI/CD" }
+        ];
+
+        const select = document.getElementById('requirementId');
+        select.innerHTML = '<option value="">Не выбрано</option>';
+        
+        requirements.forEach(req => {
+            const option = document.createElement('option');
+            option.value = req.id;
+            option.textContent = `${req.code} - ${req.title}`;
+            option.title = req.description; // Подсказка при наведении
+            select.appendChild(option);
+        });
+
+    } catch (error) {
+        showErrorMessage('Ошибка загрузки требований: ' + error.message);
     }
 }

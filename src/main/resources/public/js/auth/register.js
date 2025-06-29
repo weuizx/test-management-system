@@ -1,10 +1,11 @@
-const API_BASE_URL = 'http://45.142.44.171:8080/api/v1';
+const API_BASE_URL = 'http://45.142.44.171:32769/api/v1';
 
 document.getElementById('registerForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     
     const username = document.getElementById('username').value;
     const name = document.getElementById('name').value;
+    const role = document.getElementById('role').value;
     const password = document.getElementById('password').value;
     const errorElement = document.getElementById('errorMessage');
     const successElement = document.getElementById('successMessage');
@@ -25,6 +26,7 @@ document.getElementById('registerForm').addEventListener('submit', async functio
             body: JSON.stringify({
                 username,
                 name,
+                role,
                 password
             })
         });
